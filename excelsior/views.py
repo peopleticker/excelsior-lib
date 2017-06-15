@@ -17,23 +17,23 @@ from serializers import ExcelExportSerializer
 from builder import create_sheet
 
 
+def schema_to_file_object(schema):
+    file_object = StringIO()
+    workbook = xlsxwriter.Workbook(file_object, {'in_memory': True})
+    workbook = create_sheet(workbook, schema)
+    workbook.close()
+    file_object.seek(0)
+
+    return file_object
+
+
 class ExportToExcelMixin(object):
     """
         This Mixin will help you make file object from your exporting schema
             and stream that file object back to the client
     """
-
-    def schema_to_file_object(self, schema):
-        file_object = StringIO()
-        workbook = xlsxwriter.Workbook(file_object, {'in_memory': True})
-        workbook = create_sheet(workbook, schema)
-        workbook.close()
-        file_object.seek(0)
-
-        return file_object
-
     def stream_as_file(self, schema, **extra_params):
-        file_object = self.schema_to_file_object(schema)
+        file_object = schema_to_file_object(schema)
         response = FileResponse(file_object, status=status.HTTP_200_OK)
         filename = schema['filename']
         # NOTE: Gory details http://greenbytes.de/tech/tc2231/
