@@ -32,8 +32,11 @@ class ExportToExcelMixin(object):
         This Mixin will help you make file object from your exporting schema
             and stream that file object back to the client
     """
+    def schema_to_file_object(self, schema):
+        return schema_to_file_object(schema)
+
     def stream_as_file(self, schema, **extra_params):
-        file_object = schema_to_file_object(schema)
+        file_object = self.schema_to_file_object(schema)
         response = FileResponse(file_object, status=status.HTTP_200_OK)
         filename = schema['filename']
         # NOTE: Gory details http://greenbytes.de/tech/tc2231/
