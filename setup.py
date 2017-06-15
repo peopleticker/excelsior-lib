@@ -33,7 +33,7 @@ def parse_requirements(filename, parent=None):
 
 setup(
     name="excelsior-lib",
-    version="0.0.1",
+    version="0.0.3",
     packages=find_packages(),
     install_requires=list(parse_requirements('requirements.txt'))
 )
