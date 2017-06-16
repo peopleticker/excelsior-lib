@@ -1,3 +1,4 @@
 Django>=1.8.4
 djangorestframework>=3.2.3
+six==1.10.0
 XlsxWriter>=0.7.3

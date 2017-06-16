@@ -1,4 +1,4 @@
-from io import BytesIO
+from six import BytesIO, binary_type
 
 empty_dict = {}
 empty_list = []
@@ -59,7 +59,7 @@ def create_sheet(wb, schema):
                 image_data = options.get('image_data', None)
 
                 if image_data is not None:
-                    image_data = BytesIO(str(image_data.decode('base64')))
+                    image_data = BytesIO(binary_type(image_data.decode('base64')))
                 elif image_data is None and url:
                     image_data = BytesIO(urlopen(url).read())
 

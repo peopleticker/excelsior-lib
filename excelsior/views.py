@@ -1,20 +1,14 @@
 import json
-import urllib
 import xlsxwriter
-from StringIO import StringIO
+from six import StringIO
+from six.moves import urllib
 from django.http import FileResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 
-# Import urlopen() for either Python 2 or 3.
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
-
-from serializers import ExcelExportSerializer
-from builder import create_sheet
+from .serializers import ExcelExportSerializer
+from .builder import create_sheet
 
 
 def schema_to_file_object(schema):
