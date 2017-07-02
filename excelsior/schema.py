@@ -1,3 +1,4 @@
+import six
 
 """
     Schema API layer. Use it in the real exports implementations
@@ -101,7 +102,7 @@ class Worksheet(object):
             format = None
             value = None
 
-            if isinstance(column, basestring):
+            if isinstance(column, six.string_types):
                 value = column
             elif isinstance(column, dict):
                 format = column.get('f')

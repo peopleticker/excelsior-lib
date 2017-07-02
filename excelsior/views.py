@@ -1,6 +1,6 @@
+import six
 import json
 import xlsxwriter
-from six import StringIO
 from six.moves import urllib
 from django.http import FileResponse
 from rest_framework import status
@@ -11,9 +11,11 @@ from .serializers import ExcelExportSerializer
 from .builder import create_sheet
 
 
-def schema_to_file_object(schema):
-    file_object = StringIO()
-    workbook = xlsxwriter.Workbook(file_object, {'in_memory': True})
+def write_schema_to_file_object(schema, file_object):
+    workbook = xlsxwriter.Workbook(file_object, {
+        'in_memory': True,
+        'constant_memory': True
+    })
     workbook = create_sheet(workbook, schema)
     workbook.close()
     file_object.seek(0)
@@ -26,11 +28,11 @@ class ExportToExcelMixin(object):
         This Mixin will help you make file object from your exporting schema
             and stream that file object back to the client
     """
-    def schema_to_file_object(self, schema):
-        return schema_to_file_object(schema)
+    def write_schema_to_file_object(self, schema, file_object):
+        return write_schema_to_file_object(schema, file_object)
 
     def stream_as_file(self, schema, **extra_params):
-        file_object = self.schema_to_file_object(schema)
+        file_object = self.write_schema_to_file_object(schema, six.BytesIO())
         response = FileResponse(file_object, status=status.HTTP_200_OK)
         filename = schema['filename']
         # NOTE: Gory details http://greenbytes.de/tech/tc2231/
@@ -61,7 +63,7 @@ class ExportToExcelView(ExportToExcelMixin, APIView):
         # Notice: We allow submitting both types - ajax and form based
         schema = request.data['data']
         if (request.content_type in self.form_media_types
-                and isinstance(schema, basestring)):
+                and isinstance(schema, six.string_types)):
             schema = json.loads(schema)
 
         serializer = ExcelExportSerializer(data=schema)
