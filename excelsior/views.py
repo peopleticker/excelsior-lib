@@ -36,7 +36,7 @@ class ExportToExcelMixin(object):
         response = FileResponse(file_object, status=status.HTTP_200_OK)
         filename = schema['filename']
         # NOTE: Gory details http://greenbytes.de/tech/tc2231/
-        filename_fallback = "filename*=UTF-8''{}".format(urllib.quote(filename.encode('utf-8')))
+        filename_fallback = "filename*=UTF-8''{}".format(urllib.parse.quote(filename.encode('utf-8')))
         response['Content-Disposition'] = 'attachment; filename="{}"; {}'.format(filename, filename_fallback)
         response['Content-Type'] = 'application/vnd.ms-excel'
 
