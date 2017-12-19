@@ -27,6 +27,7 @@ class Worksheet(object):
         self.tables = []
         self.merged_cells = []
         self.hyperlinks = []
+        self.formulas = []
         self.images = []
         self.current_row_idx = 0
 
@@ -204,6 +205,26 @@ class Worksheet(object):
 
         return self
 
+    def write_formula(self, row_idx, col_idx, formula,
+                      format=None, default_value=None):
+        formula = {
+            'row': row_idx,
+            'col': col_idx,
+            'formula': formula
+        }
+
+        if format is not None:
+            if not self.workbook.has_format(format):
+                raise ExportError(
+                    'Row %d, Column %d refers to non-existent format %s' \
+                         % (row_idx, col_idx, format)
+                )
+            formula['format'] = format
+        if default_value is not None:
+            formula['default_value'] = default_value
+
+        self.formulas.append(formula)
+
     def write_image(self, row_idx, col_idx, url, options={}):
         self.images.append({
             'row': row_idx,
@@ -240,6 +261,9 @@ class Worksheet(object):
 
         if len(self.hyperlinks) > 0:
             schema['hyperlinks'] = self.hyperlinks
+
+        if len(self.formulas) > 0:
+            schema['formulas'] = self.formulas
 
         if len(self.images) > 0:
             schema['images'] = self.images
