@@ -30,6 +30,7 @@ class Worksheet(object):
         self.formulas = []
         self.images = []
         self.autofilters = []
+        self.frozen_panes = []
         self.current_row_idx = 0
 
     def write_empty_rows(self, rows_to_write = 1):
@@ -256,6 +257,14 @@ class Worksheet(object):
             'last_col': last_col_idx,
         })
 
+    def add_frozen_pane(self, row_idx, col_idx, top_row=None, left_col=None):
+        self.frozen_panes.append({
+            'row': row_idx,
+            'col': col_idx,
+            'top_row': top_row,
+            'left_col': left_col,
+        })
+
     def as_dict(self):
         schema = {
             'cells': self.cells,
@@ -285,6 +294,9 @@ class Worksheet(object):
 
         if len(self.autofilters) > 0:
             schema['autofilters'] = self.autofilters
+
+        if len(self.frozen_panes) > 0:
+            schema['frozen_panes'] = self.frozen_panes        
 
         return schema
 

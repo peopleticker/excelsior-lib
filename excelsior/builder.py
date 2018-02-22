@@ -132,4 +132,14 @@ def create_sheet(wb, schema):
                     autofilter['last_col']
                 )
 
+        if 'frozen_panes' in sheet:
+            frozen_panes_list = sheet.get('frozen_panes') or []
+            for pane in frozen_panes_list:
+                worksheet.freeze_panes(
+                    pane['row'],
+                    pane['col'],
+                    pane['top_row'],
+                    pane['left_col']
+                )
+
     return wb
