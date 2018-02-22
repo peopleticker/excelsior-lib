@@ -29,6 +29,7 @@ class Worksheet(object):
         self.hyperlinks = []
         self.formulas = []
         self.images = []
+        self.autofilters = []
         self.current_row_idx = 0
 
     def write_empty_rows(self, rows_to_write = 1):
@@ -247,6 +248,14 @@ class Worksheet(object):
 
         return self
 
+    def add_autofilter(self, first_row_idx, first_col_idx, last_row_idx, last_col_idx):
+        self.autofilters.append({
+            'first_row': first_row_idx,
+            'first_col': first_col_idx,
+            'last_row': last_row_idx,
+            'last_col': last_col_idx,
+        })
+
     def as_dict(self):
         schema = {
             'cells': self.cells,
@@ -273,6 +282,9 @@ class Worksheet(object):
 
         if len(self.merged_cells) > 0:
             schema['merged_cells'] = self.merged_cells
+
+        if len(self.autofilters) > 0:
+            schema['autofilters'] = self.autofilters
 
         return schema
 

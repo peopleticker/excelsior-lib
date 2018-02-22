@@ -89,7 +89,7 @@ class WorksheetSerializer(serializers.Serializer):
     rows = ExcelRowSerializer(many=True, required=False, allow_null=True)
     formulas = FormulaSerializer(many=True, required=False, allow_null=True)
     images = ImageSerializer(many=True, required=False, allow_null=True)
-    autofilter = AutofilterSerializer(required=False, allow_null=True)
+    autofilters = AutofilterSerializer(many=True, required=False, allow_null=True)
     hyperlinks = HyperlinkSerializer(many=True, required=False, allow_null=True)
     tables = TableSerializer(many=True, required=False, allow_null=True)
     merged_cells = MergedCellsSerializer(many=True, required=False, allow_null=True)

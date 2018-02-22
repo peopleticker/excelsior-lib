@@ -84,15 +84,6 @@ def create_sheet(wb, schema):
                     hyperlink.get('tip', None)
                 )
 
-        if 'autofilter' in sheet:
-            atf = sheet['autofilter']
-            worksheet.autofilter(
-                atf['first_row'],
-                atf['first_col'],
-                atf['last_row'],
-                atf['last_col']
-            )
-
         if 'tables' in sheet:
             for table in sheet['tables']:
                 options = table.get('options', empty_dict)
@@ -120,6 +111,25 @@ def create_sheet(wb, schema):
                     merged['last_col'],
                     merged['data'],
                     added_formats.get(merged.get('format', None), None),
+                )
+
+        if 'autofilter' in sheet:
+            atf = sheet['autofilter']
+            worksheet.autofilter(
+                atf['first_row'],
+                atf['first_col'],
+                atf['last_row'],
+                atf['last_col']
+            )
+
+        if 'autofilters' in sheet:
+            autofilters_list = sheet.get('autofilters') or []
+            for autofilter in autofilters_list:
+                worksheet.autofilter(
+                    autofilter['first_row'],
+                    autofilter['first_col'],
+                    autofilter['last_row'],
+                    autofilter['last_col']
                 )
 
     return wb
