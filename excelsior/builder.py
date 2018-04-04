@@ -142,4 +142,7 @@ def create_sheet(wb, schema):
                     pane['left_col']
                 )
 
+        if 'zoom' in sheet:
+            worksheet.set_zoom(sheet.get('zoom'))
+
     return wb

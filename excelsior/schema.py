@@ -32,6 +32,7 @@ class Worksheet(object):
         self.autofilters = []
         self.frozen_panes = []
         self.current_row_idx = 0
+        self.zoom = None
 
     def write_empty_rows(self, rows_to_write = 1):
         self.current_row_idx += rows_to_write
@@ -265,6 +266,10 @@ class Worksheet(object):
             'left_col': left_col,
         })
 
+    def set_zoom(self, value):
+        value = abs(int(value))
+        self.zoom = value
+
     def as_dict(self):
         schema = {
             'cells': self.cells,
@@ -296,7 +301,10 @@ class Worksheet(object):
             schema['autofilters'] = self.autofilters
 
         if len(self.frozen_panes) > 0:
-            schema['frozen_panes'] = self.frozen_panes        
+            schema['frozen_panes'] = self.frozen_panes
+
+        if self.zoom is not None:
+            schema['zoom'] = self.zoom;
 
         return schema
 
