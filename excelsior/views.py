@@ -34,9 +34,9 @@ class ExportToExcelMixin(object):
     def stream_as_file(self, schema, **extra_params):
         file_object = self.write_schema_to_file_object(schema, six.BytesIO())
         response = FileResponse(file_object, status=status.HTTP_200_OK)
-        filename = schema['filename']
+        filename = urllib.parse.quote(schema['filename'].encode('utf-8'))
         # NOTE: Gory details http://greenbytes.de/tech/tc2231/
-        filename_fallback = u"filename*=UTF-8''{}".format(urllib.parse.quote(filename.encode('utf-8')))
+        filename_fallback = u'filename*=UTF-8\'\'{}'.format(filename)
         response['Content-Disposition'] = u'attachment; filename="{}"; {}'.format(filename, filename_fallback)
         response['Content-Type'] = u'application/vnd.ms-excel'
 
