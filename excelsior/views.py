@@ -36,9 +36,9 @@ class ExportToExcelMixin(object):
         response = FileResponse(file_object, status=status.HTTP_200_OK)
         filename = schema['filename']
         # NOTE: Gory details http://greenbytes.de/tech/tc2231/
-        filename_fallback = "filename*=UTF-8''{}".format(urllib.parse.quote(filename.encode('utf-8')))
-        response['Content-Disposition'] = 'attachment; filename="{}"; {}'.format(filename, filename_fallback)
-        response['Content-Type'] = 'application/vnd.ms-excel'
+        filename_fallback = u"filename*=UTF-8''{}".format(urllib.parse.quote(filename.encode('utf-8')))
+        response['Content-Disposition'] = u'attachment; filename="{}"; {}'.format(filename, filename_fallback)
+        response['Content-Type'] = u'application/vnd.ms-excel'
 
         cookie = (extra_params.get('cookie') or
                         self.request.data.get('cookie'))
