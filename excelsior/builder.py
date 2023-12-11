@@ -58,9 +58,12 @@ def create_sheet(wb, schema):
                 url = img['url']
                 options = img.get('options', empty_dict)
                 image_data = options.get('image_data', None)
+                image_path = options.get('image_path', None)
 
                 if image_data is not None:
                     image_data = six.BytesIO(str(image_data.decode('base64')))
+                elif image_path is not None:
+                    image_data = six.BytesIO(open(image_path, 'rb').read())
                 elif image_data is None and url:
                     image_data = six.BytesIO(urlopen(url).read())
 
